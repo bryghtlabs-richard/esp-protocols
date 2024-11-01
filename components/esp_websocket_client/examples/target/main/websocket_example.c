@@ -98,6 +98,8 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base, i
             ESP_LOGW(TAG, "Received closed message with code=%d", 256 * data->data_ptr[0] + data->data_ptr[1]);
         } else {
             ESP_LOGW(TAG, "Received=%.*s\n\n", data->data_len, (char *)data->data_ptr);
+            vTaskDelay(configTICK_RATE_HZ);
+            ESP_LOGW(TAG, "Artificial 1sec delay complete");
         }
 
         // If received data contains json structure it succeed to parse
