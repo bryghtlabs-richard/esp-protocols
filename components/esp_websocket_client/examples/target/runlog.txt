@@ -1,0 +1,239 @@
+I (116) boot:  6 coredump         Unknown data     01 03 ns in sleep stateESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x15 (USB_UART_CHIP_RESET),boot:0x28 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40048839
+0x40048839: uart_tx_one_char_uart in ROM
+
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce3818,len:0x18ec
+load:0x403c9700,len:0x4
+load:0x403c9704,len:0xda4
+load:0x403cc700,len:0x3084
+entry 0x403c9934
+I (26) boot: ESP-IDF v5.1.2-12-ga1d649238b 2nd stage bootloader
+I (27) boot: compile time Nov  1 2024 14:33:43
+I (27) boot: Multicore bootloader
+I (31) boot: chip revision: v0.2
+I (35) qio_mode: Enabling default flash chip QIO
+I (40) boot.esp32s3: Boot SPI Speed : 80MHz
+I (45) boot.esp32s3: SPI Mode       : QIO
+I (50) boot.esp32s3: SPI Flash Size : 16MB
+I (55) boot: Enabling RNG early entropy source...
+I (60) boot: Partition Table:
+I (64) boot: ## Label            Usage          Type ST Offset   Length
+I (71) boot:  0 phy_init         RF data          01 01 0000d000 00001000
+I (78) boot:  1 caldata          Unknown data     01 06 0000e000 00001000
+I (86) boot:  2 otadata          OTA data         01 00 0000f000 00002000
+I (93) boot:  3 efuse_em         efuse            01 05 00011000 00002000
+I (101) boot:  4 nvs_key          Unknown data     01 06 00013000 00001000
+I (108) boot:  5 nvs_cache        WiFi data        01 02 00014000 0027c000
+I (116) boot:  6 coredump         Unknown data     01 03 00290000 00040000
+I (123) boot:  7 nvs              WiFi data        01 02 002d0000 00010000
+I (131) boot:  8 WBL1             OTA app          00 11 002e0000 00090000
+I (138) boot:  9 WBL2             OTA app          00 12 00370000 00090000
+I (146) boot: 10 APP1             OTA app          00 10 00400000 00600000
+I (154) boot: 11 APP2             OTA app          00 13 00a00000 00600000
+I (161) boot: End of partition table
+I (165) esp_image: segment 0: paddr=00400020 vaddr=3c0a0020 size=2576ch (153452) map
+I (197) esp_image: segment 1: paddr=00425794 vaddr=3fc97300 size=0458ch ( 17804) load
+I (201) esp_image: segment 2: paddr=00429d28 vaddr=40374000 size=062f0h ( 25328) load
+I (208) esp_image: segment 3: paddr=00430020 vaddr=42000020 size=992f4h (627444) map
+I (306) esp_image: segment 4: paddr=004c931c vaddr=4037a2f0 size=0cf48h ( 53064) load
+I (325) boot: Loaded app from partition at offset 0x400000
+I (326) boot: Disabling RNG early entropy source...
+I (337) cpu_start: Multicore app
+I (337) cpu_start: Pro cpu up.
+I (337) cpu_start: Starting app cpu, entry point is 0x40375510
+0x40375510: call_start_cpu1 at C:/Espressif/frameworks/esp-idf-v5.1.2/components/esp_system/port/cpu_start.c:157
+
+I (0) cpu_start: App cpu up.
+I (355) cpu_start: Pro cpu start user code
+I (355) cpu_start: cpu freq: 160000000 Hz
+I (355) cpu_start: Application information:
+I (358) cpu_start: Project name:     websocket_example
+I (364) cpu_start: App version:      websocket-v1.3.0-4-g3ebcfe1
+I (371) cpu_start: Compile time:     Nov  1 2024 17:25:21
+I (377) cpu_start: ELF file SHA256:  4ab4344f5d6f342c...
+I (383) cpu_start: ESP-IDF:          v5.1.2-12-ga1d649238b
+I (389) cpu_start: Min chip rev:     v0.0
+I (394) cpu_start: Max chip rev:     v0.99
+I (398) cpu_start: Chip rev:         v0.2
+I (403) heap_init: Initializing. RAM available for dynamic allocation:
+I (410) heap_init: At 3FC9F910 len 00049E00 (295 KiB): DRAM
+I (417) heap_init: At 3FCE9710 len 00005724 (21 KiB): STACK/DRAM
+I (423) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (429) heap_init: At 600FE010 len 00001FD8 (7 KiB): RTCRAM
+I (436) spi_flash: detected chip: gd
+I (440) spi_flash: flash io: qio
+I (444) sleep: Configure to isolate all GPIO pins in sleep state
+I (451) sleep: Enable automatic switching of GPIO sleep configuration
+I (458) app_start: Starting scheduler on CPU0
+I (463) app_start: Starting scheduler on CPU1
+I (463) main_task: Started on CPU0
+I (473) main_task: Calling app_main()
+I (473) websocket: [APP] Startup..
+I (483) websocket: [APP] Free memory: 338636 bytes
+I (483) websocket: [APP] IDF version: v5.1.2-12-ga1d649238b
+I (503) example_connect: Start example_connect.
+I (503) pp: pp rom version: e7ae62f
+I (503) net80211: net80211 rom version: e7ae62f
+I (513) wifi:wifi driver task: 3fcaaec8, prio:23, stack:6656, core=0
+I (523) wifi:wifi firmware version: 91b9630
+I (523) wifi:wifi certification version: v7.0
+I (523) wifi:config NVS flash: enabled
+I (523) wifi:config nano formating: disabled
+I (533) wifi:Init data frame dynamic rx buffer num: 32
+I (533) wifi:Init static rx mgmt buffer num: 5
+I (533) wifi:Init management short buffer num: 32
+I (543) wifi:Init dynamic tx buffer num: 32
+I (543) wifi:Init static tx FG buffer num: 2
+I (553) wifi:Init static rx buffer size: 1600
+I (553) wifi:Init static rx buffer num: 10
+I (553) wifi:Init dynamic rx buffer num: 32
+I (563) wifi_init: rx ba win: 6
+I (563) wifi_init: tcpip mbox: 32
+I (573) wifi_init: udp mbox: 6
+I (573) wifi_init: tcp mbox: 6
+I (573) wifi_init: tcp tx win: 5744
+I (583) wifi_init: tcp rx win: 5744
+I (583) wifi_init: tcp mss: 1440
+I (593) wifi_init: WiFi IRAM OP enabled
+I (593) wifi_init: WiFi RX IRAM OP enabled
+I (603) phy_init: phy_version 620,ec7ec30,Sep  5 2023,13:49:13
+I (643) wifi:mode : sta (64:e8:33:44:81:ec)
+I (643) wifi:enable tsf
+I (643) example_connect: Connecting to ***********...
+I (643) example_connect: Waiting for IP(s)
+I (3053) wifi:new:<6,0>, old:<1,0>, ap:<255,255>, sta:<6,0>, prof:1
+I (3533) wifi:state: init -> auth (b0)
+I (3533) wifi:state: auth -> assoc (0)
+I (3543) wifi:state: assoc -> run (10)
+I (3593) wifi:connected with ***********, aid = 3, channel 6, BW20, bssid =
+I (3603) wifi:security: WPA2-PSK, phy: bgn, rssi: -50
+I (3603) wifi:pm start, type: 1
+
+I (3603) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000
+I (3693) wifi:AP's beacon interval = 102400 us, DTIM period = 2
+I (4613) esp_netif_handlers: example_netif_sta ip: 192.168.1.30, mask: 255.255.255.0, gw: 192.168.1.1
+I (4613) example_connect: Got IPv4 event: Interface "example_netif_sta" address: 192.168.1.30
+I (4613) example_common: Connected to example_netif_sta
+I (4623) example_common: - IPv4 address: 192.168.1.30,
+I (4633) websocket: Connecting to ws://192.168.1.23:5000...
+W (4633) websocket_client: `reconnect_timeout_ms` is not set, or it is less than or equal to zero, using default time out 10000 (milliseconds)
+W (4653) websocket_client: `network_timeout_ms` is not set, or it is less than or equal to zero, using default time out 10000 (milliseconds)
+I (4663) websocket: WEBSOCKET_EVENT_BEGIN
+I (4673) websocket_client: Started
+I (4923) wifi:<ba-add>idx:0 (ifx:0), tid:0, ssn:0, winSize:64
+I (4953) websocket: WEBSOCKET_EVENT_CONNECTED
+I (4973) websocket: Sending 0000
+I (4973) websocket_client: Sending 4 bytes took 0.000 seconds
+I (5073) websocket: Sending 0001
+I (5073) websocket_client: Sending 4 bytes took 0.000 seconds
+W (5133) websocket: Received=0000
+I (5173) websocket: Sending 0002
+W (6133) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (6133) websocket: Received=0001
+W (7133) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+I (7133) websocket_client: Sending 4 bytes took 1.960 seconds
+I (7233) websocket: Sending 0003
+I (7233) websocket_client: Sending 4 bytes took 0.000 seconds
+I (7333) websocket: Sending 0004
+I (7333) websocket_client: Sending 4 bytes took 0.000 seconds
+I (7433) websocket: Sending 0005
+I (7433) websocket_client: Sending 4 bytes took 0.000 seconds
+W (7503) websocket: Received=0002
+I (7533) websocket: Sending 0006
+W (8503) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (8503) websocket: Received=0003
+W (9503) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (9503) websocket: Received=0004
+W (10503) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (10503) websocket: Received=0005
+W (11503) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+I (11503) websocket_client: Sending 4 bytes took 3.970 seconds
+I (11603) websocket: Sending 0007
+I (11603) websocket_client: Sending 4 bytes took 0.000 seconds
+I (11703) websocket: Sending 0008
+I (11703) websocket_client: Sending 4 bytes took 0.000 seconds
+I (11803) websocket: Sending 0009
+I (11803) websocket_client: Sending 4 bytes took 0.000 seconds
+I (11903) websocket: Sending 0010
+I (11903) websocket_client: Sending 4 bytes took 0.000 seconds
+I (12003) websocket: Sending 0011
+I (12003) websocket_client: Sending 4 bytes took 0.000 seconds
+W (12093) websocket: Received=0006
+I (12103) websocket: Sending 0012
+W (13093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (13093) websocket: Received=0007
+W (14093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (14093) websocket: Received=0008
+W (15093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (15093) websocket: Received=0009
+W (16093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (16093) websocket: Received=0010
+W (17093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (17093) websocket: Received=0011
+W (18093) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+I (18093) websocket_client: Sending 4 bytes took 5.990 seconds
+I (18193) websocket: Sending 0013
+I (18193) websocket_client: Sending 4 bytes took 0.000 seconds
+I (18293) websocket: Sending 0014
+I (18293) websocket_client: Sending 4 bytes took 0.000 seconds
+I (18393) websocket: Sending 0015
+I (18393) websocket_client: Sending 4 bytes took 0.000 seconds
+I (18493) websocket: Sending 0016
+I (18493) websocket_client: Sending 4 bytes took 0.000 seconds
+I (18593) websocket: Sending 0017
+I (18593) websocket_client: Sending 4 bytes took 0.000 seconds
+W (18653) websocket: Received=0012
+I (18693) websocket: Sending 0018
+W (19653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (19653) websocket: Received=0013
+W (20653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (20653) websocket: Received=0014
+W (21653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (21653) websocket: Received=0015
+W (22653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (22653) websocket: Received=0016
+W (23653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (23653) websocket: Received=0017
+W (24653) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+I (24653) websocket_client: Sending 4 bytes took 5.960 seconds
+I (24753) websocket: Sending 0019
+I (24753) websocket_client: Sending 4 bytes took 0.000 seconds
+W (24813) websocket: Received=0018
+W (25813) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+W (25813) websocket: Received=0019
+W (26813) websocket: Total payload length=4, data_len=4, current payload offset=0
+
+I (31813) websocket: No data received for 5 seconds, signaling shutdown
+I (31813) websocket_client: Sending 0 bytes took 0.000 seconds
+W (31853) websocket: Received=
+W (32853) websocket: Total payload length=0, data_len=0, current payload offset=0
+
+W (32853) transport_ws: esp_transport_ws_poll_connection_closed: unexpected data readable on socket=54
+W (32853) websocket_client: Connection terminated while waiting for clean TCP close
+I (32863) websocket: WEBSOCKET_EVENT_FINISH
+I (32873) websocket: Websocket Stopped
+I (32873) main_task: Returned from app_main()
+I (37853) websocket: No data received for 5 seconds, signaling shutdown
