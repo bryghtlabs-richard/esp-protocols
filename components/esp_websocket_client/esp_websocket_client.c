@@ -587,6 +587,8 @@ static int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_hand
         return -1;
     }
 
+    TickType_t ticks_before = xTaskGetTickCount();
+
     if (xSemaphoreTakeRecursive(client->lock, timeout) != pdPASS) {
         ESP_LOGE(TAG, "Could not lock ws-client within %" PRIu32 " timeout", timeout);
         return -1;
@@ -628,6 +630,9 @@ static int esp_websocket_client_send_with_exact_opcode(esp_websocket_client_hand
     }
     esp_websocket_free_buf(client, true);
     ret = widx;
+
+    TickType_t ticks_after = xTaskGetTickCount();
+    ESP_LOGI(TAG, "Sending %i bytes took %.3f seconds", len, (float)(ticks_after - ticks_before)/(float)configTICK_RATE_HZ);
 
 unlock_and_return:
     xSemaphoreGiveRecursive(client->lock);
