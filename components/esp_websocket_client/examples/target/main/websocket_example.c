@@ -131,6 +131,56 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base, i
     }
 }
 
+//To test that basic example is working, use SENDER_TASK_COUNT=1, SENDER_TASK_FRAGS>1
+//To test multi-writer example, use SENDER_TASK_COUNT=2, SENDER_TASK_FRAGS>1
+#define SENDER_TASK_COUNT 2
+#define SENDER_TASK_STACK 4096
+#define SENDER_TASK_PRIO 2
+#define SENDER_TASK_TRANSFERS 5
+#define SENDER_TASK_FRAGS 3 //Per transfer
+
+static EventGroupHandle_t senderGroup;
+typedef struct {
+  esp_websocket_client_handle_t client;
+  TaskHandle_t xTask;
+} sender_task_info_t;
+
+static sender_task_info_t sender_task_info[SENDER_TASK_COUNT];
+
+static void sender_task(void *pv)
+{
+    sender_task_info_t * myInfo = pv;
+    unsigned tid = myInfo - sender_task_info;
+    esp_websocket_client_handle_t client = myInfo->client;
+
+    char data[32];//Data[0] = TID, data[1] = transfer, data[2] = frag
+    memset(data, 'a' + tid, sizeof(data));
+    data[0] = '0' + tid;
+
+    for(unsigned i = 0; i < SENDER_TASK_TRANSFERS; ++i){
+      data[1] = '0' + i;//Transfer
+      data[2] = '0';//Frag0
+
+      // Sending text frags
+      vTaskDelay(rand() % CONFIG_FREERTOS_HZ);
+      ESP_LOGD(TAG, "TID%u: Sending fragmented text message %u", tid, i);
+      esp_websocket_client_send_text_partial(client, data, sizeof(data), portMAX_DELAY);
+      for(unsigned frag = 1; frag < SENDER_TASK_FRAGS; ++frag){
+        data[2] = '0' + frag;//Frag#
+        vTaskDelay(rand() % CONFIG_FREERTOS_HZ);
+        esp_websocket_client_send_cont_msg(client, data, sizeof(data), portMAX_DELAY);
+      }
+      vTaskDelay(rand() % CONFIG_FREERTOS_HZ);
+      esp_websocket_client_send_fin(client, portMAX_DELAY);
+    }
+    ESP_LOGI(TAG, "TID:%u: Done sending %u fragmented text messages", tid, SENDER_TASK_TRANSFERS);
+
+    xEventGroupSetBits(senderGroup, 1U << tid);
+    while(1){
+      vTaskDelay(1);
+    }
+}
+
 static void websocket_app_start(void)
 {
     esp_websocket_client_config_t websocket_cfg = {};
@@ -184,45 +234,35 @@ static void websocket_app_start(void)
     esp_websocket_register_events(client, WEBSOCKET_EVENT_ANY, websocket_event_handler, (void *)client);
 
     esp_websocket_client_start(client);
-    xTimerStart(shutdown_signal_timer, portMAX_DELAY);
-    char data[32];
-    int i = 0;
-    while (i < 5) {
-        if (esp_websocket_client_is_connected(client)) {
-            int len = sprintf(data, "hello %04d", i++);
-            ESP_LOGI(TAG, "Sending %s", data);
-            esp_websocket_client_send_text(client, data, len, portMAX_DELAY);
-        }
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    while(!esp_websocket_client_is_connected(client)){
+      ESP_LOGI(TAG, "waiting for client to connect");
+      vTaskDelay(CONFIG_FREERTOS_HZ/5);
     }
 
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    // Sending text data
-    ESP_LOGI(TAG, "Sending fragmented text message");
-    memset(data, 'a', sizeof(data));
-    esp_websocket_client_send_text_partial(client, data, sizeof(data), portMAX_DELAY);
-    memset(data, 'b', sizeof(data));
-    esp_websocket_client_send_cont_msg(client, data, sizeof(data), portMAX_DELAY);
-    esp_websocket_client_send_fin(client, portMAX_DELAY);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    senderGroup = xEventGroupCreate();
 
-    // Sending binary data
-    ESP_LOGI(TAG, "Sending fragmented binary message");
-    char binary_data[5];
-    memset(binary_data, 0, sizeof(binary_data));
-    esp_websocket_client_send_bin_partial(client, binary_data, sizeof(binary_data), portMAX_DELAY);
-    memset(binary_data, 1, sizeof(binary_data));
-    esp_websocket_client_send_cont_msg(client, binary_data, sizeof(binary_data), portMAX_DELAY);
-    esp_websocket_client_send_fin(client, portMAX_DELAY);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    for(unsigned i = 0; i < SENDER_TASK_COUNT; ++i){
+      char task_name[20];
+      snprintf(task_name, sizeof(task_name), "Sender%u", i);
+      sender_task_info[i].client = client;
+      if (xTaskCreate(sender_task, task_name, SENDER_TASK_STACK, sender_task_info + i, SENDER_TASK_PRIO, &sender_task_info[i].xTask) != pdTRUE) {
+          ESP_LOGE(TAG, "Error create sender task");
+      }
+    }
+    xTimerStart(shutdown_signal_timer, portMAX_DELAY);
 
-    // Sending text data longer than ws buffer (default 1024)
-    ESP_LOGI(TAG, "Sending text longer than ws buffer (default 1024)");
-    const int size = 2000;
-    char *long_data = malloc(size);
-    memset(long_data, 'a', size);
-    esp_websocket_client_send_text(client, long_data, size, portMAX_DELAY);
+    //Wait for all tasks done
+    xEventGroupWaitBits(senderGroup, (1 << SENDER_TASK_COUNT)-1, pdFALSE, pdTRUE, portMAX_DELAY);
 
+    //Delete tasks
+    for(unsigned i = 0; i < SENDER_TASK_COUNT; ++i){
+      vTaskDelete(sender_task_info[i].xTask);
+      sender_task_info[i].xTask = NULL;
+      sender_task_info[i].client = NULL;
+    }
+
+    vEventGroupDelete(senderGroup);
     xSemaphoreTake(shutdown_sema, portMAX_DELAY);
     esp_websocket_client_close(client, portMAX_DELAY);
     ESP_LOGI(TAG, "Websocket Stopped");
